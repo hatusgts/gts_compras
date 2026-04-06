@@ -14,25 +14,74 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "TB_CLIENTE")
 public class Cliente {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column
+    @NotBlank
     private String nome;
 
+    @Column(unique = true)
     @Email
+    @NotBlank
     private String email;
-    
-    @OneToMany(mappedBy = "TB_CLIENTE", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Endereco> enderecos = new HashSet<>();
 
-    
-    @OneToMany(mappedBy = "TB_CLIENTE", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Pedido> pedidos = new HashSet<>();
+
+    public Cliente() {
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(Set<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    public Set<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(Set<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
 }
